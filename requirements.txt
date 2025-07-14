@@ -1,0 +1,3 @@
+discord.py
+mlx_lm
+python-dotenv
