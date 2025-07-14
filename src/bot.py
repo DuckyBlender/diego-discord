@@ -24,6 +24,9 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
+    
+    if message.type != discord.MessageType.default and message.type != discord.MessageType.reply:
+        return
 
     if message.reference and message.reference.resolved:
         if message.reference.resolved.author != bot.user:
