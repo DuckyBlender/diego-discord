@@ -95,6 +95,7 @@ def generate_response(messages):
     try:
         response: ChatResponse = chat(model=MODEL, messages=messages, think=False)
         content = response.message.content
+        # Clean <think> tags just in case
         cleaned_content = re.sub(r'<think>.*?</think>', '', content).strip()
         return cleaned_content
     except Exception as e:
