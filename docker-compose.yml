@@ -1,35 +1,7 @@
 services:
-  ollama:
-    image: ollama/ollama:latest
-    restart: unless-stopped
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-    environment:
-      - OLLAMA_KEEP_ALIVE=24h
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    # Pre-pull your model, then start the default server process
-    command:
-      [
-        "/bin/sh",
-        "-lc",
-        "ollama pull duckyblender/diegoGPT && exec ollama serve",
-      ]
-
   app:
     build: .
     restart: unless-stopped
-    depends_on:
-      ollama:
-        condition: service_healthy
     env_file:
       - .env
     command: ["python", "app.py"]
-
-volumes:
-  ollama-data: {}

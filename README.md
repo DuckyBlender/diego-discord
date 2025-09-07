@@ -19,7 +19,7 @@ You can also run the bot using Docker Compose:
 docker-compose up
 ```
 
-Note that this will only run on CPU.
+The docker-compose does not include ollama, so you'll still have to run it in the background.
 
 ## Features
 - Responds to messages in a specific Discord channel
