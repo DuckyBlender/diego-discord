@@ -94,12 +94,14 @@ async def on_message(message):
 def generate_response(messages):
     try:
         response: ChatResponse = chat(model=MODEL, messages=messages, think=False)
-        content = response.message.content
-        # Clean <think> tags just in case
-        cleaned_content = re.sub(r'<think>.*?</think>', '', content).strip()
+        content = response.message.content or ''
+        print(f"Raw response content: {repr(content)}")
+        cleaned_content = re.sub(r'<think\s*>.*?</think\s*>', '', content, flags=re.DOTALL).strip()
+        print(f"Cleaned content: {repr(cleaned_content)}")  # Debug: Print cleaned content
         return cleaned_content
     except Exception as e:
         print(f"Error calling Ollama: {e}")
         return "Sorry, I'm having trouble generating a response right now."
+
 
 bot.run(TOKEN)
