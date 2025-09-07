@@ -1,6 +1,7 @@
 services:
   ollama:
     image: ollama/ollama:latest
+    restart: unless-stopped
     ports:
       - "11434:11434"
     volumes:
@@ -22,6 +23,7 @@ services:
 
   app:
     build: .
+    restart: unless-stopped
     depends_on:
       ollama:
         condition: service_healthy
