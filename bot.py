@@ -92,7 +92,7 @@ async def on_message(message):
 
 def generate_response(messages):
     try:
-        response: ChatResponse = chat(model=MODEL, messages=messages)
+        response: ChatResponse = chat(model=MODEL, messages=messages, think=False)
         return response.message.content
     except Exception as e:
         print(f"Error calling Ollama: {e}")
