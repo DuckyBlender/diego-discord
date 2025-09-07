@@ -7,7 +7,7 @@ A simple Discord bot powered by Ollama and the fine-tuned DiegoGPT model.
 - Ollama installed and running
 
 ## Setup
-1. Install Ollama
+1. Install Ollama and make sure it's running
 2. Pull the model: `ollama pull duckyblender/diegoGPT`
 3. Install dependencies: `pip install -r requirements.txt`
 4. Create `.env` file with `DISCORD_TOKEN=your_bot_token`
