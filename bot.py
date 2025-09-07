@@ -3,6 +3,7 @@ from discord import Client, Intents
 import os
 from ollama import chat, ChatResponse
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -93,7 +94,9 @@ async def on_message(message):
 def generate_response(messages):
     try:
         response: ChatResponse = chat(model=MODEL, messages=messages, think=False)
-        return response.message.content
+        content = response.message.content
+        cleaned_content = re.sub(r'<think>.*?</think>', '', content).strip()
+        return cleaned_content
     except Exception as e:
         print(f"Error calling Ollama: {e}")
         return "Sorry, I'm having trouble generating a response right now."
