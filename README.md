@@ -13,6 +13,14 @@ A simple Discord bot powered by Ollama and the fine-tuned DiegoGPT model.
 4. Create `.env` file with `DISCORD_TOKEN=your_bot_token`
 5. Run: `python bot.py`
 
+You can also run the bot using Docker Compose:
+
+```bash
+docker-compose up
+```
+
+Note that this will only run on CPU.
+
 ## Features
 - Responds to messages in a specific Discord channel
 - Maintains conversation history via replies
