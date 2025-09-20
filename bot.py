@@ -7,6 +7,11 @@ import re
 
 load_dotenv()
 
+ALLOWED_CHANNELS = [
+    '1394337366822617111' # DiegoGPT Testing
+    '1418887616996311041' # Unmapped Nest
+]
+
 TOKEN = os.getenv('DISCORD_TOKEN')
 if not TOKEN:
     raise ValueError("DISCORD_TOKEN not found in environment variables")
@@ -31,7 +36,7 @@ async def on_message(message):
     if message.type not in [discord.MessageType.default, discord.MessageType.reply]:
         return
 
-    if str(message.channel.id) != '1394337366822617111':
+    if str(message.channel.id) not in ALLOWED_CHANNELS:
         return
 
     messages = []
