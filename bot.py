@@ -8,7 +8,7 @@ import re
 load_dotenv()
 
 ALLOWED_CHANNELS = [
-    '1394337366822617111' # DiegoGPT Testing
+    '1394337366822617111', # DiegoGPT Testing
     '1418887616996311041' # Unmapped Nest
 ]
 
@@ -37,8 +37,10 @@ async def on_message(message):
         return
 
     if str(message.channel.id) not in ALLOWED_CHANNELS:
+        print(f"Ignoring message from unauthorized channel: {message.channel.id} ({message.channel.name})")
         return
 
+    print(f"Processing message from allowed channel: {message.channel.id} ({message.channel.name})")
     messages = []
     is_reply_to_bot = False
 
