@@ -78,15 +78,12 @@ async def on_message(message):
             except (discord.NotFound, discord.HTTPException):
                 break # Stop if we can't fetch a message in the chain
 
-        # Add system prompt at the beginning
-        messages.insert(0, {"role": "system", "content": "You are DiegoGPT, an AI from Brazil"})
     else:
         # Not a reply to the bot, treat as a new conversation
         # But first, ensure it's not a reply to another user
         if message.reference:
             return # It's a reply, but not to the bot, so ignore.
 
-        messages.append({"role": "system", "content": "You are DiegoGPT, an AI from Brazil"})
         messages.append({"role": "user", "content": message.content})
 
     if not messages:
@@ -103,7 +100,7 @@ def generate_response(messages):
         response: ChatResponse = chat(model=MODEL, messages=messages, think=False)
         content = response.message.content or ''
         print(f"Raw response content: {repr(content)}")
-        cleaned_content = re.sub(r'<think\s*>.*?</think\s*>', '', content, flags=re.DOTALL).strip()
+        cleaned_content = re.sub(r'<think[^>]*>.*?</think>', '', content, flags=re.DOTALL).strip()
         print(f"Cleaned content: {repr(cleaned_content)}")  # Debug: Print cleaned content
         return cleaned_content
     except Exception as e:
