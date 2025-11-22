@@ -9,7 +9,8 @@ load_dotenv()
 
 ALLOWED_CHANNELS = [
     '1394337366822617111', # DiegoGPT Testing
-    '1418887616996311041' # Unmapped Nest
+    '1418887616996311041', # Unmapped Nest
+    '1441841663751487548' # Diego Island
 ]
 
 TOKEN = os.getenv('DISCORD_TOKEN')
