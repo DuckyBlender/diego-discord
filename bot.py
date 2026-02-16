@@ -25,6 +25,19 @@ intents.message_content = True
 
 bot = Client(intents=intents)
 
+
+def sanitize_content(content: str) -> str:
+    text = content or ''
+
+    # If a closing </think> tag appears anywhere, keep only what comes after it.
+    closing_matches = list(re.finditer(r'</think\s*>', text, flags=re.IGNORECASE))
+    if closing_matches:
+        text = text[closing_matches[-1].end():]
+
+    # Remove any remaining explicit <think>...</think> blocks.
+    text = re.sub(r'<think[^>]*>.*?</think\s*>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    return text.strip()
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user}!')
@@ -64,7 +77,7 @@ async def on_message(message):
         depth = 0
         while current_message and depth < 10:
             role = "assistant" if current_message.author == bot.user else "user"
-            messages.insert(0, {"role": role, "content": current_message.content})
+            messages.insert(0, {"role": role, "content": sanitize_content(current_message.content)})
 
             if not current_message.reference:
                 break
@@ -85,7 +98,7 @@ async def on_message(message):
         if message.reference:
             return # It's a reply, but not to the bot, so ignore.
 
-        messages.append({"role": "user", "content": message.content})
+        messages.append({"role": "user", "content": sanitize_content(message.content)})
 
     if not messages:
         return
@@ -101,7 +114,9 @@ def generate_response(messages):
         response: ChatResponse = chat(model=MODEL, messages=messages, think=False)
         content = response.message.content or ''
         print(f"Raw response content: {repr(content)}")
-        cleaned_content = re.sub(r'<think[^>]*>.*?</think>', '', content, flags=re.DOTALL).strip()
+        cleaned_content = sanitize_content(content)
+        if not cleaned_content:
+            cleaned_content = "<malformed response>"
         print(f"Cleaned content: {repr(cleaned_content)}")  # Debug: Print cleaned content
         return cleaned_content
     except Exception as e:
